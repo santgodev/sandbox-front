@@ -1,0 +1,22 @@
+.example-container{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+
+}
+mat-form-field{
+    flex: 1 1 auto; 
+    margin: 5px;
+}
+h2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h4{
+    margin-top: 15px;
+   display: flex;
+    align-items: center;
+    justify-content: center;
+  }

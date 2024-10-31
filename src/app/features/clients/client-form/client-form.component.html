@@ -1,0 +1,84 @@
+<h2 mat-dialog-title>Nuevo cliente</h2>
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="form">
+      <div class="example-container">
+        <mat-form-field>
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            placeholder="Nombre de la empresa"
+            formControlName="NOMBRE_CLIENTE"
+            (blur)="updateErrorMessage()"
+            required
+          />
+          <mat-error *ngIf="form.get('EMPRESA')?.invalid">
+            {{ errorMessage() }}
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field>
+          <mat-label>Nit</mat-label>
+          <input
+            matInput
+            placeholder="0000"
+            formControlName="NIT"
+            (blur)="updateErrorMessage()"
+            required
+          />
+          <mat-error *ngIf="form.get('NIT')?.invalid">
+            {{ errorMessage() }}
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field>
+          <mat-label>Telefono</mat-label>
+          <input
+            matInput
+            placeholder="+57 0000000"
+            formControlName="TELEFONO"
+            (blur)="updateErrorMessage()"
+            required
+          />
+          <mat-error *ngIf="form.get('TELEFONO')?.invalid">
+            {{ errorMessage() }}
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field>
+          <mat-label>Direccion</mat-label>
+          <input
+            matInput
+            placeholder="calle 67"
+            formControlName="DIRECCION"
+            (blur)="updateErrorMessage()"
+            required
+          />
+          <mat-error *ngIf="form.get('DIRECCION')?.invalid">
+            {{ errorMessage() }}
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field>
+          <mat-label>Informacion</mat-label>
+          <input
+            matInput
+            placeholder="Info"
+            formControlName="INFORMACION"
+            (blur)="updateErrorMessage()"
+            required
+          />
+          <mat-error *ngIf="form.get('INFORMACION')?.invalid">
+            {{ errorMessage() }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </form>
+  </mat-dialog-content>
+  
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-button *ngIf="!data" [disabled]="form.invalid" [mat-dialog-close]="true"  (click)="addClient()">Crear</button>
+  <button mat-button *ngIf="data" [mat-dialog-close]="true"  (click)="updateClient()">Actualizar</button>
+</mat-dialog-actions>
+
+

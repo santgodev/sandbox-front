@@ -1,0 +1,48 @@
+<div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
+
+  <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+    <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches"
+      fixedTopGap="56">
+      <mat-nav-list>
+        <div class="img-container">
+          <a routerLink="/dashboard">
+            <img src="https://sinapptic.com/wp-content/uploads/2017/05/Logo-sinapptic-final.png">
+          </a>
+        </div>
+        <a mat-list-item [routerLink]="['/dashboard']">
+          <p mat-line><mat-icon mat-list-icon>event</mat-icon>Inicio</p>
+        </a>
+        <mat-expansion-panel *ngFor="let module of modulesWithComponents">
+          <mat-expansion-panel-header>
+            <mat-icon>{{module.ICONO}}</mat-icon>
+            <label>{{module.TITULO}}</label>
+          </mat-expansion-panel-header>
+          <mat-nav-list>
+            <mat-list-item *ngFor="let component of module.COMPONENTS" >
+              <p matline routerLink={{component.RUTA}} routerLinkActive="active">
+                <mat-icon>{{component.ICONO}}</mat-icon>  
+                {{component.NOMBRE_COMPONENTE}}
+              </p>
+            </mat-list-item>
+          </mat-nav-list>
+
+          
+
+        </mat-expansion-panel>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <mat-toolbar color="primary">
+        <button mat-icon-button (click)="snav.toggle()" color="primary"><mat-icon>menu</mat-icon></button>
+        <span color="primary">Sinapptic</span>
+      </mat-toolbar>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+
+  </mat-sidenav-container>
+</div>
+
+
+<!-- https://www.concretepage.com/angular-material/angular-material-sidebar-menu-with-submenu -->
+ <!-- https://material.angular.io/components/sidenav/overview -->

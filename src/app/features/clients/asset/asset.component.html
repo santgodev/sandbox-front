@@ -1,0 +1,85 @@
+<button mat-button (click)="openCreateDialog()">Open dialog</button>
+
+<mat-form-field>
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+</mat-form-field>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <!-- ID_ACTIVO Column -->
+  <ng-container matColumnDef="ID_ACTIVO">
+    <th mat-header-cell *matHeaderCellDef> ID Activo </th>
+    <td mat-cell *matCellDef="let element"> {{element.ID_ACTIVO}} </td>
+  </ng-container>
+
+  <!-- NOMBRE_ACTIVO Column -->
+  <ng-container matColumnDef="NOMBRE_ACTIVO">
+    <th mat-header-cell *matHeaderCellDef> Nombre Activo </th>
+    <td mat-cell *matCellDef="let element"> {{element.NOMBRE_ACTIVO}} </td>
+  </ng-container>
+
+  <!-- CATEGORIA Column -->
+  <ng-container matColumnDef="CATEGORIA">
+    <th mat-header-cell *matHeaderCellDef> Categoría </th>
+    <td mat-cell *matCellDef="let element"> {{element.CATEGORIA}} </td>
+  </ng-container>
+
+  <!-- MARCA Column -->
+  <ng-container matColumnDef="MARCA">
+    <th mat-header-cell *matHeaderCellDef> MARCA </th>
+    <td mat-cell *matCellDef="let element"> {{element.MARCA}} </td>
+  </ng-container>
+
+  <!-- REFERENCIA Column -->
+  <ng-container matColumnDef="REFERENCIA">
+    <th mat-header-cell *matHeaderCellDef> Referencia </th>
+    <td mat-cell *matCellDef="let element"> {{element.REFERENCIA}} </td>
+  </ng-container>
+
+  <!-- SERIAL Column -->
+  <ng-container matColumnDef="SERIAL">
+    <th mat-header-cell *matHeaderCellDef> Serial </th>
+    <td mat-cell *matCellDef="let element"> {{element.SERIAL}} </td>
+  </ng-container>
+
+  <!-- ESTADO Column -->
+  <ng-container matColumnDef="ESTADO">
+    <th mat-header-cell *matHeaderCellDef> ESTADO </th>
+    <td mat-cell *matCellDef="let element"> {{element.ESTADO}} </td>
+  </ng-container>
+
+  <!-- NOVEDADES Column -->
+  <ng-container matColumnDef="NOVEDADES">
+    <th mat-header-cell *matHeaderCellDef> Novedades </th>
+    <td mat-cell *matCellDef="let element"> {{element.NOVEDADES}} </td>
+  </ng-container>
+  <ng-container matColumnDef="OPERACIONES">
+    <th mat-header-cell *matHeaderCellDef> OPERACIONES </th>
+    <td mat-cell *matCellDef="let element; let index=index">
+      <button mat-icon-button color="primary"
+        (click)="openDialogDelete(template, element.ID_ACTIVO)"><mat-icon>delete</mat-icon></button>
+      <button mat-icon-button color="primary" (click)="openAssetFormUpdate(element)"><mat-icon>edite</mat-icon></button>
+    </td>
+
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+
+<ng-template #template>
+  <div class="dialog-container">
+    <h4>Confirmación de Eliminación</h4>
+    <mat-dialog-content>
+      <p>¿Está seguro de que desea eliminar este elemento? Esta acción no se puede deshacer.</p>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Cancelar</button>
+      <button mat-button [mat-dialog-close]="true" color="warn" (click)="onDeleteAssets()">Eliminar</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>
+
+

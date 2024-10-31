@@ -1,0 +1,51 @@
+.assigDeviceDialogContent{
+    display: flex;
+}
+.inputForSerial{
+    display: flex;
+    
+    flex: 1 1;
+    margin: 5px;
+}
+
+.dialog-tittle{
+    margin-top: 15px;
+   display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 1;
+  }
+  .dialog-content {
+    display: flex;
+    flex-direction: column;
+    min-width: 30vw;
+  }
+  
+
+  
+  .assetsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px; /* Espacio entre assets */
+    margin-top: 16px;
+  }
+  
+  .assetCard {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 4px;
+    min-width: 150px;
+    flex: 1; /* Distribuye las tarjetas de forma equitativa */
+  }
+
+  .buttonContainer {
+    display: flex;
+    justify-content: flex-end; /* Alinea a la izquierda */
+    align-items: flex-end; /* Alinea al fondo de la tarjeta */
+    margin-top: auto; /* Empuja el botón hacia abajo */
+  }
+
+
+  

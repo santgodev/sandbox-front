@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  justify-content: center;
+  background-color: rgb(82, 143, 196, 0.9);
+  height: 100vh;
+  align-items: center;
+
+}
+
+mat-form-field {
+display: flex;
+width: 300px;
+}
+
+mat-card {
+  max-width: 350px;
+  width: 95%;
+
+}
+
+mat-card-title,
+mat-card-content {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.error {
+  padding: 16px;
+  width: 300px;
+  color: white;
+  background-color: red;
+}
+
+.button {
+  display: flex;
+  justify-content: flex-end;
+}

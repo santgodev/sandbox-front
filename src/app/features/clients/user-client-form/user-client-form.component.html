@@ -1,0 +1,118 @@
+<h2 mat-dialog-title>Nuevo cliente</h2>
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="form">
+    <div class="example-container">
+      <mat-form-field>
+        <mat-label>ID Cliente</mat-label>
+        <input
+          matInput
+          placeholder="ID Cliente"
+          formControlName="ID_CLIENTE"
+          required
+        />
+        <mat-error *ngIf="form.get('ID_CLIENTE')?.invalid">
+          {{ errorMessage() }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Nombre</mat-label>
+        <input
+          matInput
+          placeholder="Nombre"
+          formControlName="NOMBRE"
+          required
+        />
+        <mat-error *ngIf="form.get('NOMBRE')?.invalid">
+          {{ errorMessage() }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Apellido</mat-label>
+        <input
+          matInput
+          placeholder="Apellido"
+          formControlName="APELLIDO"
+          required
+        />
+        <mat-error *ngIf="form.get('APELLIDO')?.invalid">
+          {{ errorMessage() }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Cargo</mat-label>
+        <input
+          matInput
+          placeholder="Cargo"
+          formControlName="CARGO"
+          required
+        />
+        <mat-error *ngIf="form.get('CARGO')?.invalid">
+          {{ errorMessage() }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Usuario Dominio</mat-label>
+        <input
+          matInput
+          placeholder="Usuario Dominio"
+          formControlName="USUARIO_DOMINIO"
+          required
+        />
+        <mat-error *ngIf="form.get('USUARIO_DOMINIO')?.invalid">
+          {{ errorMessage() }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Correo</mat-label>
+        <input
+          matInput
+          placeholder="correo@ejemplo.com"
+          formControlName="CORREO"
+          required
+        />
+        <mat-error *ngIf="form.get('CORREO')?.invalid">
+          {{ errorMessage() }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Cédula</mat-label>
+        <input
+          matInput
+          placeholder="Cédula"
+          formControlName="CC"
+          required
+        />
+        <mat-error *ngIf="form.get('CC')?.invalid">
+          {{ errorMessage() }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Teléfono</mat-label>
+        <input
+          matInput
+          placeholder="+57 0000000"
+          formControlName="TELEFONO"
+          required
+        />
+        <mat-error *ngIf="form.get('TELEFONO')?.invalid">
+          {{ errorMessage() }}
+        </mat-error>
+      </mat-form-field>
+
+    </div>
+  </form>
+</mat-dialog-content>
+
+  
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-button *ngIf="!data" [disabled]="form.invalid" [mat-dialog-close]="true"  (click)="addUserClient()">Crear</button>
+  <button mat-button *ngIf="data" [mat-dialog-close]="true"  (click)="updateUserClient()">Actualizar</button>
+</mat-dialog-actions>

@@ -1,0 +1,32 @@
+<div class="container">
+    <mat-card>
+        <mat-card-title><img src="https://sinapptic.com/wp-content/uploads/2017/05/logo.png" alt=""></mat-card-title>
+        <mat-card-content>
+            <form [formGroup]="form" (ngSubmit)="submit()">
+                <p>
+                    <mat-form-field>
+                        <input type="text" matInput placeholder="Username" formControlName="username">
+                    </mat-form-field>
+                </p>
+
+                <p>
+                    <mat-form-field>
+                        <input type="password" matInput placeholder="Password" formControlName="password">
+                    </mat-form-field>
+                </p>
+
+                <p *ngIf="(username?.touched && username?.invalid) || (password?.touched && password?.invalid)" class="error">
+                    <ng-container *ngIf="username?.errors?.['required']">El correo es obligatorio.</ng-container>
+                    <ng-container *ngIf="username?.errors?.['email']">El formato del correo no es válido.</ng-container>
+                    <ng-container *ngIf="password?.errors?.['required']">La contraseña es obligatoria.</ng-container>
+                    <ng-container *ngIf="password?.errors?.['minlength']">La contraseña debe tener al menos 8 caracteres.</ng-container>
+                    <ng-container *ngIf="(username?.invalid && password?.invalid)">Correo o contraseña incorrecta.</ng-container>
+                  </p>
+                <div class="button">
+                    <button type="submit" mat-button>Login</button>
+                </div>
+
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

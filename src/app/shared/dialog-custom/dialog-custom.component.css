@@ -1,0 +1,10 @@
+.dialog-container{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+
+}
+h2{
+    display: flex;
+   align-self: center;
+}

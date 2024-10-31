@@ -1,0 +1,60 @@
+<button mat-button (click)="openCreateDialog()">Open dialog</button>
+
+<table mat-table [dataSource]="clientsService.clients$" class="mat-elevation-z8">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- Position Column -->
+
+    <ng-container matColumnDef="EMPRESA">
+        <th mat-header-cell *matHeaderCellDef> EMPRESA</th>
+        <td mat-cell *matCellDef="let element"> {{element.NOMBRE_CLIENTE}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="NIT">
+        <th mat-header-cell *matHeaderCellDef> NIT </th>
+        <td mat-cell *matCellDef="let element"> {{element.NIT}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="TELEFONO">
+        <th mat-header-cell *matHeaderCellDef> TELEFONO </th>
+        <td mat-cell *matCellDef="let element"> {{element.TELEFONO}} </td>
+    </ng-container>
+    <ng-container matColumnDef="DIRECCION">
+        <th mat-header-cell *matHeaderCellDef> DIRECCION </th>
+        <td mat-cell *matCellDef="let element"> {{element.DIRECCION}} </td>
+    </ng-container>
+    <ng-container matColumnDef="INFORMACION">
+        <th mat-header-cell *matHeaderCellDef> INFORMACION </th>
+        <td mat-cell #elementt *matCellDef="let element"> {{element.INFORMACION}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="OPERACIONES">
+        <th mat-header-cell *matHeaderCellDef> OPERACIONES </th>
+        <td mat-cell *matCellDef="let element; let index=index">
+            <button mat-icon-button color="primary"
+                (click)="openDialogDelete(template, element.ID_CLIENTE)"><mat-icon>delete</mat-icon></button>
+            <button mat-icon-button color="primary"
+                (click)="openClientFormUpdate(element)"><mat-icon>edite</mat-icon></button>
+        </td>
+
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+
+<ng-template #template>
+    <div class="dialog-container">
+        <h4>Confirmación de Eliminación</h4>
+        <mat-dialog-content>
+            <p>¿Está seguro de que desea eliminar este elemento? Esta acción no se puede deshacer.</p>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+            <button mat-button mat-dialog-close>Cancelar</button>
+            <button mat-button [mat-dialog-close]="true" color="warn" (click)="onDelete()">Eliminar</button>
+        </mat-dialog-actions>
+    </div>
+</ng-template>

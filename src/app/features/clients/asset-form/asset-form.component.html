@@ -1,0 +1,102 @@
+<h2 mat-dialog-title>{{ data ? 'Actualizar Activo' : 'Nuevo Activo' }}</h2>
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="form">
+    <div class="example-container">
+
+      <mat-form-field>
+        <mat-label>Nombre Activo</mat-label>
+        <input
+          matInput
+          placeholder="Nombre del Activo"
+          formControlName="NOMBRE_ACTIVO"
+          required
+        />
+        <mat-error *ngIf="form.get('NOMBRE_ACTIVO')?.invalid">
+          Este campo es obligatorio.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Categoría</mat-label>
+        <input
+          matInput
+          placeholder="Categoría"
+          formControlName="CATEGORIA"
+          required
+        />
+        <mat-error *ngIf="form.get('CATEGORIA')?.invalid">
+          Este campo es obligatorio.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Marca</mat-label>
+        <input
+          matInput
+          placeholder="Marca"
+          formControlName="MARCA"
+          required
+        />
+        <mat-error *ngIf="form.get('MARCA')?.invalid">
+          Este campo es obligatorio.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Referencia</mat-label>
+        <input
+          matInput
+          placeholder="Referencia"
+          formControlName="REFERENCIA"
+          required
+        />
+        <mat-error *ngIf="form.get('REFERENCIA')?.invalid">
+          Este campo es obligatorio.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Serial</mat-label>
+        <input
+          matInput
+          placeholder="Serial"
+          formControlName="SERIAL"
+          required
+        />
+        <mat-error *ngIf="form.get('SERIAL')?.invalid">
+          Este campo es obligatorio.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Estado</mat-label>
+        <input
+          matInput
+          placeholder="Estado"
+          formControlName="ESTADO"
+          required
+        />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Novedades</mat-label>
+        <input
+          matInput
+          placeholder="Novedades"
+          formControlName="NOVEDADES"
+          required
+        />
+        <mat-error *ngIf="form.get('NOVEDADES')?.invalid">
+          Este campo es obligatorio.
+        </mat-error>
+      </mat-form-field>
+
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-button *ngIf="!data" [mat-dialog-close]="true"  [disabled]="form.invalid" (click)="addAsset()">Crear</button>
+  <button mat-button *ngIf="data" [mat-dialog-close]="true" (click)="updateAsset()">Actualizar</button>
+</mat-dialog-actions>
