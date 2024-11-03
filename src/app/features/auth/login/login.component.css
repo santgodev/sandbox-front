@@ -1,28 +1,32 @@
 .container {
   display: flex;
   justify-content: center;
-  background-color: rgb(82, 143, 196, 0.9);
   height: 100vh;
   align-items: center;
+  padding-left: 20%;
+  padding-right: 20%;
 
 }
 
 mat-form-field {
 display: flex;
-width: 300px;
+width: 95%px;
 }
 
 mat-card {
-  max-width: 350px;
-  width: 95%;
+width: 75%;
+min-width: 300px;
 
 }
 
-mat-card-title,
-mat-card-content {
+.login-form,
+.logo-container {
   display: flex;
   justify-content: center;
   margin-top: 20px;
+  width: 48%;
+  align-items: baseline;
+
 }
 
 .error {
@@ -35,4 +39,25 @@ mat-card-content {
 .button {
   display: flex;
   justify-content: flex-end;
+}
+
+
+.h-custom {
+  height: calc(100%);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2000 1500'%3E%3Cdefs%3E%3Crect width='1' height='1' fill='%23e0e0e0' id='s'/%3E%3Cpattern id='grid' width='30' height='30' patternUnits='userSpaceOnUse' %3E%3Cuse href='%23s'/%3E%3C/pattern%3E%3Cpattern id='diagonal' width='20' height='20' patternUnits='userSpaceOnUse'%3E%3Cpath d='M 0 20 L 20 0' stroke='%23cccccc' stroke-width='0.5'/%3E%3C/pattern%3E%3C/defs%3E%3Crect fill='url(%23grid)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23diagonal)' width='100%25' height='100%25'/%3E%3C/svg%3E");
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.img-logo{
+  width: 75%;
+}
+mat-card-title {
+  display: flex;
+  justify-content:center ;
+}
+
+@media  (max-width: 768px){
+  .container{
+    flex-direction: column;  }
 }
