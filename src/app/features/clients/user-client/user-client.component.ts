@@ -1,4 +1,4 @@
-import { Component, inject, TemplateRef } from '@angular/core';
+import { Component, inject, TemplateRef, OnDestroy } from '@angular/core';
 import { UserClientService } from '../../../core/services/clients/user-client.service';
 import { DialogService } from '../../../core/services/shared/dialog.service';
 import { IUserClient } from '../../../core/interfaces/clients/iuser-client';
@@ -9,133 +9,117 @@ import { IClient } from '../../../core/interfaces/clients/client';
 import { AssetsService } from '../../../core/services/clients/assets.service';
 import { IAsset } from '../../../core/interfaces/clients/iasset';
 import { MatTableDataSource } from '@angular/material/table';
-import { filter, map, Observable, startWith, tap } from 'rxjs';
-import { FormControl, NgModel } from '@angular/forms';
+import { filter, map, Observable, startWith, tap, takeUntil } from 'rxjs';
+import { FormControl } from '@angular/forms';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-user-client',
   templateUrl: './user-client.component.html',
-  styleUrl: './user-client.component.css'
+  styleUrls: ['./user-client.component.css']
 })
-export class UserClientComponent {
-
+export class UserClientComponent implements OnDestroy {
 
   clients: IClient[] = [];
   idAssetToAssing: string = '';
-  idUserClientToAssing: string = '';
-
-  userClientInfo?: IUserClient;
-
-  usersClient: IUserClient[] = [];
-
-  assetsByUser: IAsset[] = [];
-
-  dataSourceFreeAsset = new MatTableDataSource<IAsset>();
-
+  userClientInfo!: IUserClient;
   myControl = new FormControl('');
-  options: IAsset[] = [];
-  filteredOptions?: Observable<IAsset[]>;
+  listAssetsByUser: IAsset[] = [];
+  assetsByUser: IAsset[] = [];
+  AssetsForFilter: IAsset[] = [];
+  assetsSelects$?: Observable<IAsset[]>;
+  displayedColumns2: string[] = ['nombre', 'serial', 'novedades', 'referencia', 'acciones'];
+  displayedColumns: string[] = ['NOMBRE', 'APELLIDO', 'CARGO', 'USUARIO_DOMINIO', 'CORREO', 'CC', 'TELEFONO', 'OPERACIONES'];
+  idUserClientForDelete!: string;
+  private readonly destroy$ = new Subject<void>();
+  readonly dialog = inject(MatDialog);
 
-  
   constructor(
     public userClientService: UserClientService,
     private dialogService: DialogService,
-    public assetService: AssetsService,
-
-
+    public assetService: AssetsService
   ) { }
+
   ngOnInit(): void {
-    this.userClientService.listUsers().subscribe((userClientArray) => { console.log(userClientArray); })
-    this.assetService.listFreeAssets().subscribe((freeAssets) => {
-      this.dataSourceFreeAsset.data = freeAssets
+    this.userClientService.listUsers().pipe(takeUntil(this.destroy$)).subscribe();
 
-
-      this.filteredOptions = this.myControl.valueChanges.pipe(
-        startWith(''),
-        map(value => this._filter(value || '')),
-      );
-      
-    })
-
-      
-
+    this.assetsSelects$ = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value || ''))
+    );
   }
-  private _filter(value: string): IAsset[]{
+
+  private _filter(value: string): IAsset[] {
     const filterValue = value.toLowerCase();
-    return this.options.filter(option => option.NOMBRE_ACTIVO.toLowerCase().includes(filterValue));
+    return this.AssetsForFilter.filter(assetByUser => assetByUser.SERIAL.toLowerCase().includes(filterValue));
   }
-
-
-
-  displayedColumns: string[] = ['NOMBRE', 'APELLIDO', 'CARGO', 'USUARIO_DOMINIO', 'CORREO', 'CC', 'TELEFONO', 'OPERACIONES'];
-
-  idUserClientForDelete!: string
-  readonly dialog = inject(MatDialog);
 
   openCreateDialog() {
     const dialogRef = this.dialog.open(UserClientFormComponent);
-    dialogRef.afterClosed().subscribe();
+    dialogRef.afterClosed().pipe(takeUntil(this.destroy$)).subscribe();
   }
-
 
   openDialogDelete(template: TemplateRef<any>, ID_USUARIO_CLIENTE: string) {
-    console.log(ID_USUARIO_CLIENTE);
-
     this.idUserClientForDelete = ID_USUARIO_CLIENTE;
-    this.dialogService.openDialogWithTemplate({ template }).afterClosed().subscribe(() => {
+    this.dialogService.openDialogWithTemplate({ template }).afterClosed().pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.idUserClientForDelete = '';
-    })
+    });
   }
+
   openClientFormUpdate(data: IUserClient) {
-
-    this.dialogService.openUserClientFormDialog(data).afterClosed().subscribe(() => {
-    })
+    this.dialogService.openUserClientFormDialog(data).afterClosed().pipe(takeUntil(this.destroy$)).subscribe();
   }
+
   onDelete() {
-    this.userClientService.deleteUserClient(this.idUserClientForDelete).subscribe();
+    this.userClientService.deleteUserClient(this.idUserClientForDelete).pipe(takeUntil(this.destroy$)).subscribe();
   }
 
-
-  openAssingDevideform(template: TemplateRef<any>, idUserClient: string) {
-    this.idUserClientToAssing = idUserClient
-    this.dialogService.openDialogWithTemplate({ template })
-  }
   openUserClientInfo(template: TemplateRef<any>, userClient: IUserClient) {
-    this.assetService.listAssetsByUserClientId(userClient.ID_USUARIO_CLIENTE).subscribe(
-      (assetsByUser) => { this.assetsByUser = assetsByUser })
     this.userClientInfo = userClient;
-    this.dialogService.openDialogWithTemplate({ template })
-   
+    this.assetService.listAssetsByUserClientId(userClient.ID_USUARIO_CLIENTE)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(assetsByUser => this.listAssetsByUser = assetsByUser);
 
+    this.assetService.listFreeAssets()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(freeAssets => { this.AssetsForFilter = freeAssets; });
+
+    this.dialogService.openDialogWithTemplate({ template });
   }
 
-
-
-  saveIdasset(idAsset: string) {
-    this.idAssetToAssing = idAsset
-  }
-  saveIdUserClient(idUserClient: string) {
-    this.idUserClientToAssing = idUserClient
-  }
   assingUserToAsset() {
-    this.assetService.assigUserToAsset(this.idAssetToAssing, this.idUserClientToAssing).subscribe((assets) => {
-      this.dataSourceFreeAsset.data = assets;
-    })
-  }
-  undessingDevice(idAsset:string){
-    let idUser=null;
-    this.assetService.assigUserToAsset(idAsset,idUser).subscribe(
-      ()=>{ this.assetService.listAssetsByUserClientId(this.idUserClientToAssing).subscribe(
-        (assets)=>{this.assetsByUser=assets}
-      )}
-    )
+    this.assetService.assigUserToAsset(this.idAssetToAssing, this.userClientInfo.ID_USUARIO_CLIENTE)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(assetsByUser => this.listAssetsByUser = assetsByUser);
+
+    this.assetService.listFreeAssets()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(freeAssets => { this.AssetsForFilter = freeAssets; });
+
+    this.myControl.reset();
   }
 
-  
-  applyFilterAssetsAssigUser(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSourceFreeAsset.filter = filterValue.trim().toLowerCase();
-    
+  saveAssets(asset: IAsset) {
+    this.idAssetToAssing = asset.ID_ACTIVO;
   }
 
+  undessingDevice(idAsset: string) {
+    this.assetService.undessingUserToAsset(idAsset)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(freeAssets => {
+        this.AssetsForFilter = freeAssets; 
+        this.assetService.listAssetsByUserClientId(this.userClientInfo.ID_USUARIO_CLIENTE)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(assetsByUser => this.listAssetsByUser = assetsByUser);
+      });
+
+
+
+    this.myControl.reset();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

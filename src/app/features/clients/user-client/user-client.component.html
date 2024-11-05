@@ -48,10 +48,8 @@
             <button mat-icon-button color="primary" (click)="openClientFormUpdate(element)">
                 <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button color="primary"
-                (click)="openAssingDevideform(assingDevice, element.ID_USUARIO_CLIENTE)"><mat-icon>add</mat-icon></button>
-            <button mat-icon-button color="primary"
-                (click)="openUserClientInfo(infoUserTemplate, element)"><mat-icon>info</mat-icon></button>
+            <button mat-icon-button color="primary" (click)="openUserClientInfo(infoUserTemplate, element)">
+                <mat-icon>info</mat-icon></button>
         </td>
     </ng-container>
 
@@ -74,75 +72,92 @@
 </ng-template>
 
 
-<ng-template #assingDevice>
-    <div>
-        <h4 class="dialog-tittle">Asignar equipo</h4>
+
+
+<ng-template class="modalContainer" #infoUserTemplate>
+
+    <h2 class="mat-dialog-tittle" mat-dialog-title>{{userClientInfo.EMPRESA +' - '+userClientInfo.NOMBRE.toUpperCase() +'
+        '+userClientInfo.APELLIDO.toUpperCase()  }}</h2>
+    <div class="modalContainer">
         <mat-dialog-content>
+            <div class="selectContainer">
 
-        </mat-dialog-content>
-        <mat-dialog-actions align="end">
-
-        </mat-dialog-actions>
-    </div>
-</ng-template>
-
-
-<ng-template #infoUserTemplate>
-    <div>
-        <h6 class="dialog-tittle">{{ userClientInfo?.EMPRESA+' - '+userClientInfo?.NOMBRE + ' ' +
-            userClientInfo?.APELLIDO }}</h6>
-
-        <mat-dialog-content class="dialog-content">
-
-            <div class="assigDeviceDialogContent">
-
-         
-
-                <mat-form-field class="inputForSerial">
-                        <mat-label>SN:</mat-label>
-                        <input matInput (keyup)="applyFilterAssetsAssigUser($event)" placeholder="Ex. SINAPPTIC-000">
-                    </mat-form-field>
-                    <mat-form-field class="inputForSerial">
-                        <input type="equipo"> 
-                        <mat-select>
-                            <mat-option>None</mat-option>
-                            @for (asset of dataSourceFreeAsset.filteredData; track asset) {
-                            <mat-option [value]="asset.ID_ACTIVO"
-                                (click)="saveIdasset(asset.ID_ACTIVO)">{{asset.SERIAL}}</mat-option>
+                <form class="example-form">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Number</mat-label>
+                        <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="myControl"
+                            [matAutocomplete]="auto">
+                        <mat-autocomplete #auto="matAutocomplete">
+                            @for (option of assetsSelects$ | async; track option) {
+                            <mat-option (onSelectionChange)="saveAssets(option)" [value]="option.SERIAL">{{option.SERIAL}}</mat-option>
+                        
                             }
-                        </mat-select>
+                        </mat-autocomplete>
                     </mat-form-field>
+                </form>
                 <button mat-icon-button color="primary" (click)="assingUserToAsset()">
-                    <mat-icon>info</mat-icon></button>
-            </div>
-            <mat-divider></mat-divider>
-            <br>
-            <div class="userInfo">
-                <p><strong>Nombre:</strong> {{ userClientInfo?.CARGO }}</p>
-                <p><strong>Puesto:</strong> {{ userClientInfo?.CORREO }}</p>
-                <p><strong>Correo:</strong> {{ userClientInfo?.USUARIO_DOMINIO }}</p>
-                <p><strong>Teléfono:</strong> {{ userClientInfo?.TELEFONO }}</p>
+                    <mat-icon>add</mat-icon>
+                </button>
+                
             </div>
 
             <mat-divider></mat-divider>
 
-            <div class="assetsContainer">
-                <div class="assetCard" *ngFor="let asset of assetsByUser">
-                    <p><strong>Nombre:</strong> {{ asset.NOMBRE_ACTIVO }}</p>
-                    <p><strong>Serial:</strong> {{ asset.SERIAL }}</p>
-                    <p><strong>Novedades:</strong> {{ asset.NOVEDADES }}</p>
-                    <p><strong>Referencia:</strong> {{ asset.REFERENCIA }}</p>
-                    <div class="buttonContainer">
-                        <button mat-icon-button color="warn" (click)="undessingDevice(asset.ID_ACTIVO)">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </div>
-                </div>
+            <div>
+                <p><strong>Nombre:</strong> {{ userClientInfo.CARGO }}</p>
+                <p><strong>Puesto:</strong> {{ userClientInfo.CORREO }}</p>
+                <p><strong>Correo:</strong> {{ userClientInfo.USUARIO_DOMINIO }}</p>
+                <p><strong>Teléfono:</strong> {{ userClientInfo.TELEFONO }}</p>
             </div>
+
+            <mat-divider></mat-divider>
+
+
+            <table mat-table [dataSource]="listAssetsByUser" class="mat-elevation-z8">
+  
+                <!-- Nombre Activo Column -->
+                <ng-container matColumnDef="nombre">
+                  <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                  <td mat-cell *matCellDef="let asset"> {{ asset.NOMBRE_ACTIVO }} </td>
+                </ng-container>
+              
+                <!-- Serial Column -->
+                <ng-container matColumnDef="serial">
+                  <th mat-header-cell *matHeaderCellDef> Serial </th>
+                  <td mat-cell *matCellDef="let asset"> {{ asset.SERIAL }} </td>
+                </ng-container>
+              
+                <!-- Novedades Column -->
+                <ng-container matColumnDef="novedades">
+                  <th mat-header-cell *matHeaderCellDef> Novedades </th>
+                  <td mat-cell *matCellDef="let asset"> {{ asset.NOVEDADES }} </td>
+                </ng-container>
+              
+                <!-- Referencia Column -->
+                <ng-container matColumnDef="referencia">
+                  <th mat-header-cell *matHeaderCellDef> Referencia </th>
+                  <td mat-cell *matCellDef="let asset"> {{ asset.REFERENCIA }} </td>
+                </ng-container>
+              
+                <!-- Acciones Column -->
+                <ng-container matColumnDef="acciones">
+                  <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                  <td mat-cell *matCellDef="let asset">
+                    <button mat-icon-button color="warn" (click)="undessingDevice(asset.ID_ACTIVO)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+              
+                <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+              </table>
+              
+
         </mat-dialog-content>
-
-        <mat-dialog-actions align="end">
-            <button mat-button mat-dialog-close>Cerrar</button>
-        </mat-dialog-actions>
     </div>
-</ng-template>
+    <mat-dialog-actions>
+        <button mat-button mat-dialog-close  cdkFocusInitial>Close</button>
+    </mat-dialog-actions>
+
+</ng-template>  
