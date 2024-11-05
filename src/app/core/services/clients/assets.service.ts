@@ -12,8 +12,8 @@ import { IDesigDevice } from '../../interfaces/clients/iassigDevice';
 export class AssetsService {
 
   private URL = Api_Url.URL_LOCAL;
-  private assets: IAsset[] = [];
   public assets$: BehaviorSubject<IAsset[]> = new BehaviorSubject<IAsset[]>([]);
+  public assetsByUser$: BehaviorSubject<IAsset[]> = new BehaviorSubject<IAsset[]>([]);
   public freeAssets$: BehaviorSubject<IAsset[]> = new BehaviorSubject<IAsset[]>([]);
 
   constructor(private http: HttpClient) { }
@@ -37,7 +37,7 @@ export class AssetsService {
     const data = { ID_USUARIO_CLIENTE: id }
     return this.http.post<IAsset[]>(this.URL + '/assets/listbyuserid', data).pipe(
       tap((assets) => {
-        this.assets$.next(assets);
+        this.assetsByUser$.next(assets);
       })
     );
   }
@@ -87,12 +87,23 @@ export class AssetsService {
     );
   }
 
-  assigUserToAsset(idAsset:string,idUserClient:string | null ): Observable<IAsset[]> {
+  assigUserToAsset(idAsset:string,idUserClient:string  ): Observable<IAsset[]> {
     let data = {
       ID_ACTIVO: idAsset,
       ID_USUARIO_CLIENTE: idUserClient
     }
     return this.http.put<IAsset[]>(this.URL+'/assets/assinguser', data).pipe(
+      tap((assetByUser)=>{
+        this.assetsByUser$.next(assetByUser)
+      })
+    )
+  }
+
+  undessingUserToAsset(idAsset:string): Observable<IAsset[]> {
+    let data = {
+      ID_ACTIVO: idAsset,
+    }
+    return this.http.put<IAsset[]>(this.URL+'/assets/undessinguser', data).pipe(
       tap((freeAssets)=>{
         this.freeAssets$.next(freeAssets)
       })
