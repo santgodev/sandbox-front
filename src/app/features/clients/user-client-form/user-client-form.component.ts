@@ -13,7 +13,9 @@ import { UserClientService } from '../../../core/services/clients/user-client.se
 })
 export class UserClientFormComponent {
   readonly EMPRESA = new FormControl('', [Validators.required,]);
+  
 
+  clients: IClient[] = [];
 
   errorMessage = signal('');
   form: FormGroup;
@@ -21,6 +23,7 @@ export class UserClientFormComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: IUserClient,
     private userClientService:UserClientService ,
     private fb: FormBuilder,
+    private clientService:ClientsService
 
   ) {
     this.form = this.fb.group({
@@ -56,7 +59,7 @@ export class UserClientFormComponent {
     if(this.data){
       this.form.setValue(this.data)
     }
-    console.log(this.form.value);
+    this.clientService.listClients().subscribe(clients=>this.clients=clients)
   }
 
   updateUserClient() {
@@ -64,4 +67,10 @@ export class UserClientFormComponent {
     this.userClientService.updateUserClient(dataUserClient).subscribe()
 
   }
+}
+
+
+interface Food {
+  value: string;
+  viewValue: string;
 }
